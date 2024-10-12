@@ -87,7 +87,7 @@ int main(int len, char** args) {
     for (std::map<std::string, people_val>::const_iterator person = people.begin(); person != people.end(); person++) {
         index = 0;
         std::printf("%s:\n", person->first.c_str());
-        std::printf("\t%s\n\t%s\n\t\t", person->second.name.c_str(), person->second.birth.c_str());
+        std::printf("\tName: %s\n\tBirth: %s\n\tMovies: ", person->second.name.c_str(), person->second.birth.c_str());
         for (std::set<std::string>::const_iterator movie = person->second.movies.begin(); movie != person->second.movies.end(); movie++, index++) {
             std::printf("%s%s", movie->c_str(), (index + 1 == person->second.movies.size()) ? "\n" : ", ");
         }
