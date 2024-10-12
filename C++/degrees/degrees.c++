@@ -79,7 +79,7 @@ int main(int len, char** args) {
         index = 0;
         std::printf("%s:\n", name->first.c_str());
         for (std::set<std::string>::const_iterator star = name->second.begin(); star != name->second.end(); star++, index++) {
-            std::printf("%s%s", star->c_str(), (index + 1 == name->second.size()) ? ", " : "\n");
+            std::printf("%s%s", star->c_str(), (index + 1 == name->second.size()) ? "\n" : ", ");
         }
     }
     
@@ -89,7 +89,7 @@ int main(int len, char** args) {
         std::printf("%s:\n", person->first.c_str());
         std::printf("\t%s\n\t%s\n\t\t", person->second.name.c_str(), person->second.birth.c_str());
         for (std::set<std::string>::const_iterator movie = person->second.movies.begin(); movie != person->second.movies.end(); movie++, index++) {
-            std::printf("%s%s", movie->c_str(), (index + 1 == person->second.movies.size()) ? ", " : "\n");
+            std::printf("%s%s", movie->c_str(), (index + 1 == person->second.movies.size()) ? "\n" : ", ");
         }
     }
     
