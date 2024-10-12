@@ -16,7 +16,7 @@ typedef struct people_data_type {
     bool operator<(struct people_data_type& other) {
         return this->name < other.name and this->birth < other.birth;
     }
-} people_data_type;
+} people_val;
 
 typedef struct movies_data_type {
     std::string title, year;
@@ -25,7 +25,7 @@ typedef struct movies_data_type {
     bool operator<(struct movies_data_type& other) {
         return this->title < other.title and this->year < other.year;
     }
-} movies_data_type;
+} movie_val;
 
 typedef struct neighbor_type {
     std::string movie_id, person_id;
@@ -33,14 +33,14 @@ typedef struct neighbor_type {
     bool operator<(const struct neighbor_type& other) const {
         return this->movie_id < other.movie_id and this->person_id < other.person_id;
     }
-} neighbor_type;
+} neighbor_val;
 
 typedef struct shortest_path_data_type{
     std::string action, state;
     bool operator<(struct shortest_path_data_type& other) {
         return this->action < other.action and this->state < other.state;
     }
-} shortest_path_data_type;
+} shortest_path_val;
 
 
 
@@ -51,10 +51,10 @@ typedef struct shortest_path_data_type{
 std::map<std::string, std::set<std::string> > names;
 
 // Maps person_ids to a dictionary of: name, birth, movies (a set of movie_ids)
-std::map<std::string, people_data_type> people;
+std::map<std::string, people_val> people;
 
 // Maps movie_ids to a dictionary of: title, year, stars (a set of person_ids)
-std::map<std::string, movies_data_type> movies;
+std::map<std::string, movie_val> movies;
 
 // define the IDs
 const std::string ID = "id", NAME = "name", BIRTH = "birth", MOVIES = "movies", TITLE = "title", YEAR = "year", STARS = "stars", MOVIE_ID = "movie_id", PERSON_ID = "person_id";
@@ -62,14 +62,6 @@ const std::string ID = "id", NAME = "name", BIRTH = "birth", MOVIES = "movies", 
 csv_dict_reader dict_reader(std::FILE* open_csv_file);
 
 void load_data(const std::string directory = "large");
-
-std::string person_id_for_name(const std::string name);
-
-std::vector<shortest_path_data_type> shortest_path(const std::string source, const std::string target);
-
-std::set<neighbor_type> neighbors_for_person(const std::string person_id);
-
-std::vector<shortest_path_data_type> trace_to_beginning(node* this_node);
 
 int main(int len, char** args) {
 
@@ -79,55 +71,35 @@ int main(int len, char** args) {
     }
     
     const std::string directory = (len == 2) ? args[1] : "large";
-
-    std::printf("Loading data...\n");
-    load_data(directory);
-    std::printf("Data loaded.\n");
-
-    char buffer[buffer_size];
-    std::printf("Source name: ");
-    if (not fgets(buffer, buffer_size, stdin)) {
-        std::fprintf(stderr, "Error reading in source.\n");
-        return 1;
+    unsigned long index;
+    
+    std::printf("------------------------------------------------------Names------------------------------------------------------\n");
+    for (std::map<std::string, std::set<std::string> >::const_iterator name = names.begin(); name != names.end(); name++, index++) {
+        index = 0;
+        std::printf("%s:\n", name->first.c_str());
+        for (std::set<std::string>::const_iterator star = name->second.begin(); star != name->second.end(); star++, index++) {
+            std::printf("%s%s", star->c_str(), (index + 1 == name->second.size()) ? ", " : "\n");
+        }
     }
     
-    const std::string source = person_id_for_name(std::string(buffer, std::strlen(buffer) - 1));
-    if (source.empty()) {
-        std::fprintf(stderr, "No person \"%s\" found.\n", source.c_str());
-        return 1;
-    }
-    std::printf("Target name: ");
-    if (not fgets(buffer, buffer_size, stdin)) {
-        std::fprintf(stderr, "Error reading the target.\n");
-        return 1;
-    }
-    const std::string target = person_id_for_name(std::string(buffer, std::strlen(buffer) - 1));
-    if (target.empty()) {
-        std::fprintf(stderr, "No person \"%s\" found.\n", target.c_str());
-        return 1;
-    }
-
-    std::printf("Now to find the path from \"%s\" to \"%s\"\n", people[source].name.c_str(), people[target].name.c_str());
-
-    std::vector<shortest_path_data_type> path = shortest_path(source, target);
-
-    if (path.empty()) {
-        std::printf("%s and %s are not connected.\n", source.c_str(), target.c_str());
-    }
-
-    else {
-
-        unsigned long degrees = path.size(), index;
-        std::string person1, person2, movie;
-        std::printf("%lu degrees of separation.\n", degrees - 1);
-        
-        for (index = 0; index < path.size() - 1; index++) {
-            person1 = people[path[index].state].name;
-            person2 = people[path[index + 1].state].name;
-            movie = movies[path[index].action].title;
-            std::printf("\t%lu: %s and %s starred in %s\n", index + 1, person1.c_str(), person2.c_str(), movie.c_str());
+    std::printf("-----------------------------------------------------People------------------------------------------------------\n");
+    for (std::map<std::string, people_val>::const_iterator person = people.begin(); person != people.end(); person++) {
+        index = 0;
+        std::printf("%s:\n", person->first.c_str());
+        std::printf("\t%s\n\t%s\n\t\t", person->second.name.c_str(), person->second.birth.c_str());
+        for (std::set<std::string>::const_iterator movie = person->second.movies.begin(); movie != person->second.movies.end(); movie++, index++) {
+            std::printf("%s%s", movie->c_str(), (index + 1 == person->second.movies.size()) ? ", " : "\n");
         }
-
+    }
+    
+    std::printf("-----------------------------------------------------Movies------------------------------------------------------\n");
+    for (std::map<std::string, movie_val>::const_iterator movie = movies.begin(); movie != movies.end(); movie++) {
+        index = 0;
+        std::printf("%s:\n", movie->first.c_str());
+        std::printf("\t%s\n\t%s\n\t\t", movie->second.title.c_str(), movie->second.year.c_str());
+        for (std::set<std::string>::const_iterator star = movie->second.stars.begin(); star != movie->second.stars.end(); star++, index++) {
+            std::printf("%s%s", (index + 1 == movie->second.stars.size()) ? "\n" : ", ", star->c_str());
+        }
     }
 
     return 0;
@@ -194,8 +166,8 @@ csv_dict_reader dict_reader(std::FILE* open_csv_file) {
     return the_answer;
 }
 
+// TODO : Implement me
 void load_data(const std::string directory) {
-    
     // # Load people
     // with open(f"{directory}/people.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -210,32 +182,23 @@ void load_data(const std::string directory) {
     //         else:
     //             names[row["name"].lower()].add(row["id"])
 
-
     std::FILE* open_file;
     csv_dict_reader reader;
-    
+    csv_dict_reader file_data;
+
     // Load people
     open_file = std::fopen((directory + sys_slash + "people.csv").c_str(), "r");
-    if (not open_file) {
-        std::fprintf(stderr, "Failed to open \"%s\"\n", (directory + sys_slash + "people.csv").c_str());
-        return;
-    }
-    
-    reader = dict_reader(open_file);
-    
-    for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
-        std::printf("row->ID is %s\n", row->at(ID).c_str());
-        people_data_type new_person = (people_data_type) {row->at(NAME), row->at(BIRTH), std::set<std::string>()};
-        people.insert(std::make_pair(row->at(ID), new_person));
-        
-        if (names.find(new_person.name) == names.end()) {
-            // std::printf("names now has %s\n", new_person.name.c_str());
-            names.insert(std::make_pair(new_person.name, std::set<std::string>()));
+    file_data = dict_reader(open_file);
+    for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
+        people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
+
+        if (names.find(row->at(NAME)) == names.end()) {
+            std::set<std::string>_;
+            names.insert(std::make_pair(row->at(NAME), _));
         }
-        names[new_person.name].insert(row->at(ID));
+        names[row->at(NAME)].insert(row->at(ID));
     }
     std::fclose(open_file);
-
     // # Load movies
     // with open(f"{directory}/movies.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -245,22 +208,14 @@ void load_data(const std::string directory) {
     //             "year": row["year"],
     //             "stars": set()
     //         }
-    
 
     // Load movies
     open_file = std::fopen((directory + sys_slash + "movies.csv").c_str(), "r");
-    if (not open_file) {
-        std::fprintf(stderr, "Failed to open \"%s\"\n", (directory + sys_slash + "movies.csv").c_str());
-        return;
-    }
-    reader = dict_reader(open_file);
-    
-    for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
-        movies.insert(std::make_pair(row->at(ID), (movies_data_type) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
+    file_data = dict_reader(open_file);
+    for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
+        movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
     }
     std::fclose(open_file);
-
-
     // # Load stars
     // with open(f"{directory}/stars.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -271,134 +226,18 @@ void load_data(const std::string directory) {
     //         except KeyError:
     //             pass
 
-
     // Load stars
-    open_file = std::fopen((directory + sys_slash + "stars.csv").c_str(), "r");
-    if (not open_file) {
-        std::fprintf(stderr, "Failed to open \"%s\"\n", (directory + sys_slash + "stars.csv").c_str());
-        return;
-    }
-    reader = dict_reader(open_file);
-
-    for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
+    file_data = dict_reader(open_file);
+    for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
         try {
             people[row->at(PERSON_ID)].movies.insert(row->at(MOVIE_ID));
             movies[row->at(MOVIE_ID)].stars.insert(row->at(PERSON_ID));
         }
-        catch (std::exception except) {
-            std::fprintf(stderr, "Exception caught: %s\n", except.what());
-            continue;
+
+        catch (std::exception e) {
+            std::fprintf(stderr, "Exception caught. Error message: %s\n", e.what());
         }
     }
     std::fclose(open_file);
 }
 
-std::string person_id_for_name(const std::string name) {
-
-    // Does the set contain name?
-    const std::string null = "";
-    std::string in_names;
-    for (std::map<std::string, std::set<std::string> >::const_iterator this_name = names.begin(); this_name != names.end(); this_name++) {
-        // std::printf("comparing \"%s\" and \"%s\"\n", this_name->first.c_str(), name.c_str());
-        if (same_string(this_name->first, name)) {
-            in_names = this_name->first;
-            // std::printf("Found the name in the names map.\n");
-            break;
-        }
-    }
-
-    // The name as it exists in the names map
-    if (in_names.empty()) {
-        return null;
-    }
-
-    if (names[in_names].empty()) {
-        return null;
-    }
-
-    if (names[in_names].size() > 1) {
-        char buffer[buffer_size];
-        std::printf("Which \"%s\":\n", name.c_str());
-        for (std::set<std::string>::const_iterator this_id = names[in_names].begin(); this_id != names[in_names].end(); this_id++) {
-            std::printf("ID : %s, Name : %s, Birth : %s\n", this_id->c_str(), people[*this_id].name.c_str(), people[*this_id].birth.c_str());
-        }
-        std::printf(": ");
-        if (not fgets(buffer, buffer_size, stdin)) {
-            return null;
-        }
-        for (std::set<std::string>::const_iterator this_id = names[in_names].begin(); this_id != names[in_names].end(); this_id++) {
-            if (same_string(std::string(buffer), *this_id)) {
-                return *this_id;
-            }
-        }
-    }
-    else {
-        return *names[in_names].begin();
-    }
-    
-    return null;
-}
-
-std::vector<shortest_path_data_type> shortest_path(const std::string source, const std::string target) {
-    
-    queue_frontier frontier;
-    std::set<std::string> explored;
-
-    node* this_node, *new_node;
-    std::set<neighbor_type> neighbors;
-
-    frontier.add(new node(source, nullptr, ""));
-
-    while (not frontier.empty()) {
-
-        this_node = frontier.remove();
-
-        if (same_string(this_node->state, target)) {
-            return trace_to_beginning(this_node);
-        }
-
-        neighbors = neighbors_for_person(this_node->state);
-
-        for (std::set<neighbor_type>::const_iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++) {
-
-            new_node = new node(neighbor->person_id, this_node, neighbor->movie_id);
-
-            if (same_string(new_node->state, target)) {
-                return trace_to_beginning(new_node);
-            }
-
-            else if (explored.find(neighbor->person_id) == explored.end() and not frontier.contains_state(neighbor->person_id)) {
-                frontier.add(new_node);
-            }
-            explored.insert(neighbor->person_id);
-        }
-
-    }
-    
-    return std::vector<shortest_path_data_type>();
-}
-
-std::set<neighbor_type> neighbors_for_person(const std::string person_id) {
-    
-    std::set<std::string> movie_ids = people[person_id].movies;
-    std::set<neighbor_type> the_answer;
-
-    for (std::set<std::string>::const_iterator movie_id = movie_ids.begin(); movie_id != movie_ids.end(); movie_id++) {
-        for (std::set<std::string>::const_iterator this_id = movies[*movie_id].stars.begin(); this_id != movies[*movie_id].stars.end(); this_id++) {
-            the_answer.insert((neighbor_type) {*movie_id, *this_id});
-        }
-    }
-    
-    return the_answer;
-}
-
-std::vector<shortest_path_data_type> trace_to_beginning(node* this_node) {
-    std::vector<shortest_path_data_type> the_answer;
-
-    while (this_node->parent != nullptr and not this_node->action.empty()) {
-        the_answer.push_back((shortest_path_data_type) {this_node->action, this_node->state});
-        this_node = this_node->parent;
-    }
-    // std::printf("trace_to_beginning vector size is %lu\n", the_answer.size());
-    return the_answer;
-}
