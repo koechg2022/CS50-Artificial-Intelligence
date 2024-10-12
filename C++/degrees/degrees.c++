@@ -97,7 +97,7 @@ int main(int len, char** args) {
     for (std::map<std::string, movie_val>::const_iterator movie = movies.begin(); movie != movies.end(); movie++) {
         index = 0;
         std::printf("%s:\n", movie->first.c_str());
-        std::printf("\t%s\n\t%s\n\t\t", movie->second.title.c_str(), movie->second.year.c_str());
+        std::printf("\t%s\n\t%s\n\tActors: ", movie->second.title.c_str(), movie->second.year.c_str());
         for (std::set<std::string>::const_iterator star = movie->second.stars.begin(); star != movie->second.stars.end(); star++, index++) {
             std::printf("%s%s", (index + 1 == movie->second.stars.size()) ? "\n" : ", ", star->c_str());
         }
