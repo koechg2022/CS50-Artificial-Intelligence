@@ -77,7 +77,7 @@ int main(int len, char** args) {
     std::printf("------------------------------------------------------Names------------------------------------------------------\n");
     for (std::map<std::string, std::set<std::string> >::const_iterator name = names.begin(); name != names.end(); name++, index++) {
         index = 0;
-        std::printf("%s:\n", name->first.c_str());
+        std::printf("%s:\t", name->first.c_str());
         for (std::set<std::string>::const_iterator star = name->second.begin(); star != name->second.end(); star++, index++) {
             std::printf("%s%s", star->c_str(), (index + 1 == name->second.size()) ? "\n" : ", ");
         }
