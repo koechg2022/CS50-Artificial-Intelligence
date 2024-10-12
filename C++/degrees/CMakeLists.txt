@@ -2,9 +2,12 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-# Set the compiler and point to it
-set(CMAKE_C_COMPILER "/usr/local/Cellar/llvm/18.1.8/bin/clang")
-set(CMAKE_CXX_COMPILER "/usr/local/Cellar/llvm/18.1.8/bin/clang++")
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # Set the compiler and point to it
+    set(CMAKE_C_COMPILER "/usr/local/Cellar/llvm/18.1.8/bin/clang")
+    set(CMAKE_CXX_COMPILER "/usr/local/Cellar/llvm/18.1.8/bin/clang++")
+endif
 
 
 project(degrees)
