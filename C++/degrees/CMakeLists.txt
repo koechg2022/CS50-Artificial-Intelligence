@@ -36,7 +36,7 @@ if (APPLE)
     endif()
 
 
-elseif (UNIX and not APPLE)
+elseif (UNIX AND NOT APPLE)
 
     # Set the base path for LLVM on Linux
     set(LLVM_BASE_DIR "/usr/lib/llvm")
