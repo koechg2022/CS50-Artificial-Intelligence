@@ -190,6 +190,7 @@ void load_data(const std::string directory) {
     // Load people
     open_file = std::fopen((directory + sys_slash + "people.csv").c_str(), "r");
     file_data = dict_reader(open_file);
+    std::fclose(open_file);
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
         people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
 
@@ -199,7 +200,6 @@ void load_data(const std::string directory) {
         }
         names[row->at(NAME)].insert(row->at(ID));
     }
-    std::fclose(open_file);
     // # Load movies
     // with open(f"{directory}/movies.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -213,10 +213,10 @@ void load_data(const std::string directory) {
     // Load movies
     open_file = std::fopen((directory + sys_slash + "movies.csv").c_str(), "r");
     file_data = dict_reader(open_file);
+    std::fclose(open_file);
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
         movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
     }
-    std::fclose(open_file);
     // # Load stars
     // with open(f"{directory}/stars.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -228,7 +228,9 @@ void load_data(const std::string directory) {
     //             pass
 
     // Load stars
+    open_file = std::fopen((directory + sys_slash + "stars.csv").c_str(), "r");
     file_data = dict_reader(open_file);
+    std::fclose(open_file);
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
         try {
             people[row->at(PERSON_ID)].movies.insert(row->at(MOVIE_ID));
@@ -239,6 +241,5 @@ void load_data(const std::string directory) {
             std::fprintf(stderr, "Exception caught. Error message: %s\n", e.what());
         }
     }
-    std::fclose(open_file);
 }
 
