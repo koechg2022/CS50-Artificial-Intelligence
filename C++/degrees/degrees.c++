@@ -70,7 +70,8 @@ int main(int len, char** args) {
         return 1;
     }
     
-    const std::string directory = (len == 2) ? args[1] : "large";
+    // const std::string directory = (len == 2) ? args[1] : "large";
+    load_data((len == 2) ? args[1] : "large");
     unsigned long index;
     
     std::printf("------------------------------------------------------Names------------------------------------------------------\n");
