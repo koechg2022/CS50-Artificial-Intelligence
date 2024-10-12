@@ -1,3 +1,0 @@
-/Users/geoffreykoech/Desktop/Education/Personal Learning/Computer Science/CS50’s Introduction to Artificial Intelligence/C++/degrees/build/CMakeFiles/degrees.dir
-/Users/geoffreykoech/Desktop/Education/Personal Learning/Computer Science/CS50’s Introduction to Artificial Intelligence/C++/degrees/build/CMakeFiles/edit_cache.dir
-/Users/geoffreykoech/Desktop/Education/Personal Learning/Computer Science/CS50’s Introduction to Artificial Intelligence/C++/degrees/build/CMakeFiles/rebuild_cache.dir

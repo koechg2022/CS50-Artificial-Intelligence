@@ -1,1 +1,0 @@
-/usr/local/Cellar/llvm/18.1.8/bin/clang++  -Wall -Wextra -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/degrees.dir/degrees.c++.o -o "/Users/geoffreykoech/Desktop/Education/Personal Learning/Computer Science/CS50’s Introduction to Artificial Intelligence/C++/degrees/objects/degrees"
