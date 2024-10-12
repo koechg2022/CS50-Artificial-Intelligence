@@ -1,0 +1,64 @@
+
+
+
+
+#if defined(_WIN16) or defined(_WIN32) or defined(_WIN64) or defined(__WIN32__) or defined(__TOS_WIN__) or defined(__WINDOWS__)
+
+    #if not defined(crap_os)
+        #define crap_os
+    #endif
+
+#else
+
+    #if not defined(unix_os)
+        #define unix_os
+    #endif
+
+    #if defined(__APPLE__) or defined(__APPLE_CC__)
+        #define mac_os
+    #else
+        #define linux_os
+    #endif
+
+#endif
+
+
+#if (defined(mac_os) and not defined(_LIBC_CSTRING)) or (defined(linux_os) and not defined(_GLIBCXX_STRING)) or (defined(crap_os) and not defined(_CSTRING_))
+    #include <cstring>
+#endif
+
+#if (defined(mac_os) and not defined(_LIBCPP_STRING)) or (defined(linux_os) and not defined(_GLIBCXX_STRING)) or (defined(crap_os) and not defined(_STRING_))
+    #include <string>
+#endif
+
+#if (defined(mac_os) and not defined(_LIBCPP_VECTOR)) or (defined(linux_os) and not defined(_GLIBCXX_VECTOR)) or (defined(crap_os) and not defined(_VECTOR_))
+    #include <vector>
+#endif
+
+#if (defined(mac_os) and not defined(_LIBCPP_MAP)) or (defined(linux_os) and not defined(_GLIBCXX_MAP)) or (defined(crap_os) and not defined(_MAP_))
+    #include <map>
+#endif
+
+#if (defined(mac_os) and not defined(_LIBCPP_SET)) or (defined(linux_os) and not defined(_GLIBCXX_SET)) or (defined(crap_os) and not defined(_SET_))
+    #include <set>
+#endif
+
+#if (defined(mac_os) and not defined(_LIBCPP_DEQUE)) or (defined(linux_os) and not defined(_GLIBCXX_DEQUE)) or (defined(crap_os) and not defined(_DEQUE_))
+    #include <deque>
+#endif
+
+
+#if defined(unix_os)
+    #define sys_slash "/"
+#else
+    #define syssys_slash "\\"
+#endif
+
+
+
+
+
+
+#define is ==
+#define less <
+#define greater >

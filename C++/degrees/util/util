@@ -1,0 +1,155 @@
+#include "../headers/header"
+
+
+
+bool is_caps(const char c) {
+    return (c >= 'A' and c <= 'Z');
+}
+
+bool is_lower(const char c) {
+    return (c >= 'a' and c <= 'z');
+}
+
+bool is_letter(const char c) {
+    return is_caps(c) or is_lower(c);
+}
+
+char to_caps(const char c) {
+    return (is_lower(c)) ? (c - ('a' - 'A')) : c;
+}
+
+char to_lower(const char c) {
+    return (is_caps(c)) ? (c + ('a' - 'A')) : c;
+}
+
+bool same_char(const char a, const char b, bool ignore_case = true) {
+    return (ignore_case) ? to_caps(a) == to_caps(b) : a == b;
+}
+
+bool same_string(const std::string& first, const std::string& second, bool ignore_case = true) {
+    if (first.length() != second.length()) {
+        return false;
+    }
+    unsigned long index;
+    for (index = 0; index < first.length() and same_char(first[index], second[index], ignore_case); index++);
+    return index == first.length() and index == second.length();
+}
+
+
+class node {
+    
+    public:
+        std::string state, action;
+        node* parent;
+
+        node() {
+            this->state = this->action = "";
+            this->parent = nullptr;
+        }
+
+        node(const std::string node_state, node* node_parent, const std::string node_action) {
+            this->state = node_state;
+            this->action = node_action;
+            this->parent = node_parent;
+            // std::printf("Creating a node object. state is %s, action is %s, parent is %p\n", this->state.c_str(), this->action.c_str(), this->parent);
+        }
+
+        node(const node& other) {
+            if (this != &other) {
+                this->state = other.state;
+                this->action = other.action;
+                this->parent = other.parent;
+            }
+        }
+
+        node operator=(const node& other) {
+            if (this != &other) {
+                return node(other.state, other.parent, other.action);
+            }
+            return *this;
+        }
+
+        bool operator<(const node& other) const {
+            return this->state < other.state and this->action < other.action;
+        }
+
+        bool operator==(const node& other) const {
+            return same_string(this->state, other.state);
+        }
+
+        bool equals(const node& other) const {
+            return same_string(this->state, other.state) and same_string(this->action, other.action) and this->parent == other.parent;
+        }
+
+        std::string node_state() const {
+            return this->state;
+        }
+
+        std::string node_action() const {
+            return this->action;
+        }
+
+        node* node_parent() const {
+            return this->parent;
+        }
+};
+
+
+class stack_frontier {
+
+    protected:
+        std::deque<node*> frontier;
+
+    public:
+
+        stack_frontier() {}
+
+        void add(node* new_node) {
+            this->frontier.push_back(new_node);
+        }
+
+        bool contains_state(const std::string state) {
+
+            for (std::deque<node*>::const_iterator this_node = this->frontier.begin(); this_node != this->frontier.end(); this_node++) {
+                
+                if (same_string((*this_node)->state, state)) {
+                    return true;
+                }
+
+            }
+            
+            return false;
+        }
+
+        bool empty() const {
+            return this->frontier.empty();
+        }
+
+        virtual node* remove() {
+            if (this->frontier.empty()) {
+                std::fprintf(stderr, "stack is empty.\n");
+                throw std::exception();
+            }
+            node* the_answer = this->frontier[-1];
+            this->frontier.pop_back();
+            return the_answer;
+        }
+};
+
+class queue_frontier : public stack_frontier {
+
+    public:
+
+        queue_frontier() : stack_frontier() {}
+
+        node* remove() {
+            if (this->frontier.empty()) {
+                std::fprintf(stderr, "queue is empty.\n");
+                throw std::exception();
+            }
+            node* the_answer = this->frontier[0];
+            this->frontier.pop_front();
+            return the_answer;
+        }
+};
+
