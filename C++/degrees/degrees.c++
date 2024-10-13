@@ -153,15 +153,13 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
                 same_char(line[start], '\n') ? start++ : start;
 
                 new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
-                start = current + 1;
-                index++;
             }
 
             else if (current == line.length() - 1) {
                 new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
-                start = current + 1;
-                index++;
             }
+            start = current + 1;
+            index++;
 
         }
 
