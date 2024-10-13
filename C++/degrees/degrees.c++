@@ -141,6 +141,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         index = 0;
         std::printf("Adding to the data...\n");
         while (stream >> line) {
+            std::printf("Adding the %s data.\n", the_answer.header[index].c_str());
             new_map.insert(std::make_pair(the_answer.header[index], line));
             index++;
         }
