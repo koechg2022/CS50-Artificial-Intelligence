@@ -61,6 +61,8 @@ const std::string ID = "id", NAME = "name", BIRTH = "birth", MOVIES = "movies", 
 
 csv_dict_reader dict_reader(std::FILE* open_csv_file);
 
+csv_dict_reader dict_reader(const std::string file_name, const std::string directory);
+
 void load_data(const std::string directory = "large");
 
 int main(int len, char** args) {
@@ -172,11 +174,115 @@ csv_dict_reader dict_reader(std::FILE* open_csv_file) {
         }
         line = line + ((char) c);
     }
+    
+    return the_answer;
+}
+
+csv_dict_reader dict_reader(const std::string file_name, const std::string directory) {
+    csv_dict_reader the_answer;
+    std::string line, key, value;
+
+    std::ifstream open_file((std::string(directory) + sys_slash + std::string(file_name)));
+    if (not open_file.is_open()) {
+        std::fprintf(stderr, "Failed to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
+        throw std::exception();
+    }
+
+    int index;
+    while (std::getline(open_file, line)) {
+        std::stringstream stream(line);
+        if (the_answer.header.empty()) {
+            while (stream >> line) {
+                the_answer.header.push_back(line);
+            }
+            continue;
+        }
+        std::map<std::string, std::string> new_map;
+        index = 0;
+        while (stream >> value) {
+            new_map.insert(std::make_pair(the_answer.header[index], value));
+            index++;
+        }
+
+    }
+
+    open_file.close();
     return the_answer;
 }
 
 // TODO : Implement me
 void load_data(const std::string directory) {
+    
+    // std::FILE* open_file;
+    csv_dict_reader reader;
+    csv_dict_reader file_data;
+
+    // Load people
+    // open_file = std::fopen((directory + sys_slash + "people.csv").c_str(), "r");
+    // file_data = dict_reader(open_file);
+    // std::fclose(open_file);
+    // unsigned long row_index = 0;
+    // std::printf("headers are:\n");
+    // for (std::vector<std::string>::const_iterator header = file_data.header.begin(); header != file_data.header.end(); header++, row_index++) {
+    //     std::printf("%s%lu%s", header->c_str(), row_index, (row_index + 1 == file_data.header.size()) ? "\n" : ", ");
+    // }
+    // row_index = 0;
+    // for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++, row_index++) {
+    //     std::printf("row_index : %lu\n", row_index);
+    //     people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
+
+    //     if (names.find(row->at(NAME)) == names.end()) {
+    //         std::set<std::string>_;
+    //         names.insert(std::make_pair(row->at(NAME), _));
+    //     }
+    //     names[row->at(NAME)].insert(row->at(ID));
+    // }
+    // std::printf("Done with people.\n");
+    // # Load movies
+    // with open(f"{directory}/movies.csv", encoding="utf-8") as f:
+    //     reader = csv.DictReader(f)
+    //     for row in reader:
+    //         movies[row["id"]] = {
+    //             "title": row["title"],
+    //             "year": row["year"],
+    //             "stars": set()
+    //         }
+
+    // Load movies
+    // open_file = std::fopen((directory + sys_slash + "movies.csv").c_str(), "r");
+    // file_data = dict_reader(open_file);
+    // std::fclose(open_file);
+    // for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
+    //     movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
+    // }
+    // std::printf("Done with movies\n");
+    // # Load stars
+    // with open(f"{directory}/stars.csv", encoding="utf-8") as f:
+    //     reader = csv.DictReader(f)
+    //     for row in reader:
+    //         try:
+    //             people[row["person_id"]]["movies"].add(row["movie_id"])
+    //             movies[row["movie_id"]]["stars"].add(row["person_id"])
+    //         except KeyError:
+    //             pass
+
+    // Load stars
+    // open_file = std::fopen((directory + sys_slash + "stars.csv").c_str(), "r");
+    // file_data = dict_reader(open_file);
+    // std::fclose(open_file);
+    // for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
+    //     try {
+    //         people[row->at(PERSON_ID)].movies.insert(row->at(MOVIE_ID));
+    //         movies[row->at(MOVIE_ID)].stars.insert(row->at(PERSON_ID));
+    //     }
+
+    //     catch (std::exception e) {
+    //         std::fprintf(stderr, "Exception caught. Error message: %s\n", e.what());
+    //     }
+    // }
+    // std::printf("Done with stars.\n");
+
+
     // # Load people
     // with open(f"{directory}/people.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -191,14 +297,8 @@ void load_data(const std::string directory) {
     //         else:
     //             names[row["name"].lower()].add(row["id"])
 
-    std::FILE* open_file;
-    csv_dict_reader reader;
-    csv_dict_reader file_data;
+    reader = dict_reader("people.csv", directory);
 
-    // Load people
-    open_file = std::fopen((directory + sys_slash + "people.csv").c_str(), "r");
-    file_data = dict_reader(open_file);
-    std::fclose(open_file);
     unsigned long row_index = 0;
     std::printf("headers are:\n");
     for (std::vector<std::string>::const_iterator header = file_data.header.begin(); header != file_data.header.end(); header++, row_index++) {
@@ -227,13 +327,12 @@ void load_data(const std::string directory) {
     //         }
 
     // Load movies
-    open_file = std::fopen((directory + sys_slash + "movies.csv").c_str(), "r");
-    file_data = dict_reader(open_file);
-    std::fclose(open_file);
+    file_data = dict_reader("movies.csv", directory);
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
         movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
     }
     std::printf("Done with movies\n");
+
     // # Load stars
     // with open(f"{directory}/stars.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -245,9 +344,7 @@ void load_data(const std::string directory) {
     //             pass
 
     // Load stars
-    open_file = std::fopen((directory + sys_slash + "stars.csv").c_str(), "r");
-    file_data = dict_reader(open_file);
-    std::fclose(open_file);
+    file_data = dict_reader("stars.csv", directory);
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
         try {
             people[row->at(PERSON_ID)].movies.insert(row->at(MOVIE_ID));
@@ -259,5 +356,7 @@ void load_data(const std::string directory) {
         }
     }
     std::printf("Done with stars.\n");
+
+
 }
 

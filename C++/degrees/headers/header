@@ -47,6 +47,18 @@
     #include <deque>
 #endif
 
+#if (defined(mac_os) and not defined(_LIBCPP_IOSTREAM)) or (defined(linux_os) and not defined(_GLIBCXX_IOSTREAM)) or (defined(crap_os) and not defined(_IOSTREAM_))
+    #include <iostream>
+#endif
+
+#if (defined(mac_os) and not defined(_LIBCPP_FSTREAM)) or (defined(linux_os) and not defined(_GLIBCXX_FSTREAM)) or (defined(crap_os) and not defined(_FSTREAM_))
+    #include <fstream>
+#endif
+
+#if (defined(mac_os) and not defined(_LIBCPP_SSTREAM)) or (defined(linux_os) and not defined(_GLIBCXX_SSTREAM)) or (defined(crap_os) and not defined(_SSTREAM))
+    #include <sstream>
+#endif
+
 
 #if defined(unix_os)
     #define sys_slash "/"
