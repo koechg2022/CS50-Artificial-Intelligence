@@ -158,7 +158,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
             }
 
             else if (current == line.length() - 1) {
-                new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, line.length() - start - 1)));
+                new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
                 start = current + 1;
                 index++;
             }
@@ -192,7 +192,12 @@ void load_data(const std::string directory) {
     csv_dict_reader reader = dict_reader("people.csv", directory);
     std::printf("Done creating the reader...\nHeaders are:\n");
     for (std::vector<std::string>::const_iterator head = reader.header.begin(); head != reader.header.end(); head++) {
-        std::printf("\"%s\"\n", head->c_str());
+        std::printf("%s", (head->length() > 0) ? "\"" : "");
+        for (std::string::const_iterator c = head->begin(); c != head->end(); c++) {
+            std::printf("%c", *c);
+        }
+        std::printf("%s", (head->length() > 0) ? "\"" : "");
+        // std::printf("\"%s\"\n", head->c_str());
     }
     
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
