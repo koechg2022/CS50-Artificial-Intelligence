@@ -158,7 +158,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
             }
 
             else if (current == line.length() - 1) {
-                new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
+                new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, line.length() - start - 1)));
                 start = current + 1;
                 index++;
             }
@@ -194,7 +194,7 @@ void load_data(const std::string directory) {
     for (std::vector<std::string>::const_iterator head = reader.header.begin(); head != reader.header.end(); head++) {
         std::printf("\"%s\"\n", head->c_str());
     }
-    std::printf("\n");
+    
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
         std::printf("This person's attributes are:\n");
         for (std::map<std::string, std::string>::const_iterator attr = row->begin(); attr != row->end(); attr++) {
