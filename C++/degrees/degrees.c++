@@ -115,7 +115,7 @@ int main(int len, char** args) {
 
 csv_dict_reader dict_reader(const std::string file_name, const std::string directory) {
     csv_dict_reader the_answer;
-    std::string line, key, value;
+    std::string line, value;
     std::printf("About to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
     std::ifstream open_file((std::string(directory) + sys_slash + std::string(file_name)));
     if (not open_file.is_open()) {
@@ -123,28 +123,57 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         throw std::exception();
     }
     std::printf("Done with opening the file.\n");
-    unsigned long index;
+    unsigned long start, current, index;
     while (std::getline(open_file, line)) {
-        std::stringstream stream(line);
+        
+        
         if (the_answer.header.empty()) {
             std::printf("Adding to the header...\n");
-            while (stream >> line) {
-                the_answer.header.push_back(line);
+            for (start = current = 0; current < line.length(); current++) {
+                if (same_char(line[current], ',')) {
+                    the_answer.header.push_back(line.substr(start, current - start));
+                    start = current + 1;
+                }
+
+                else if (current == line.length() - 1) {
+                    the_answer.header.push_back(line.substr(start, current - start + 1));
+                    start = current + 1;
+                }
             }
-            // index = 0;
-            // for (std::vector<std::string>::const_iterator _ = the_answer.header.begin(); _ != the_answer.header.end(); _++, index++) {
-            //     std::printf("%s%s", _->c_str(), (index < the_answer.header.size() - 1) ? ", " : "\n");
-            // }
             continue;
         }
+
         std::map<std::string, std::string> new_map;
+        
         index = 0;
-        std::printf("Adding to the data...\n");
-        while (stream >> line) {
-            std::printf("Adding the %s data.\n", the_answer.header[index].c_str());
-            new_map.insert(std::make_pair(the_answer.header[index], line));
-            index++;
+        for (start = current = 0; current < line.length(); current++) {
+
+            if (same_char(line[current], ',') or current == line.length() - 1) {
+                
+                if (same_char(line[current], ',')) {
+
+                    if (same_char(line[current], '"')) {
+                        new_map.insert(std::make_pair(the_answer.header[index], line.substr(start + 1, current - start - 2)));
+                    }
+
+                    else if (current == line.length() - 1) {
+                        new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
+                    }
+                
+                }
+
+                else {
+                    new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
+                }
+                
+                start = current + 1;
+                index++;
+            }
+
+            
+
         }
+        
     }
 
     open_file.close();
