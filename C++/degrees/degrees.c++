@@ -123,7 +123,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         throw std::exception();
     }
     std::printf("Done with opening the file.\n");
-    int index;
+    unsigned long index;
     while (std::getline(open_file, line)) {
         std::stringstream stream(line);
         if (the_answer.header.empty()) {
