@@ -133,6 +133,11 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
             }
             continue;
         }
+        index = 0;
+        for (std::vector<std::string>::const_iterator _ = the_answer.header.begin(); _ != the_answer.header.end(); _++) {
+            std::printf("%s%s", _->c_str(), (index < the_answer.header.size() - 1) ? ", " : "\n");
+        }
+        break;
         std::map<std::string, std::string> new_map;
         index = 0;
         std::printf("Adding to the data...\n");
