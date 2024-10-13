@@ -125,6 +125,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
     // std::printf("Done with opening the file.\n");
     unsigned long start, current, index;
     while (std::getline(open_file, line)) {
+        line = (not line.empty() and same_char(line[line.length() - 1], '\n')) ? line.substr(0, line.length() - 1) : line;
         // std::printf("line is %s\n", line.c_str());
         
         if (the_answer.header.empty()) {
