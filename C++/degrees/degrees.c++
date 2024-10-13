@@ -145,24 +145,19 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
 
         std::map<std::string, std::string> new_map;
         // std::printf("line is currently %s\n", line.c_str());
-        index = 0;
-        for (start = current = 0; current < line.length(); current++) {
-
-            if (same_char(line[current], ',')) {
-
-                same_char(line[start], '\n') ? start++ : start;
-
-                new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
-                start = current + 1;
-                index++;
-            }
-
-            else if (current == line.length() - 1) {
+        for (index = start = current = 0; current < line.length(); current++) {
+            if (current == line.length() - 1) {
                 new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
                 start = current + 1;
                 index++;
             }
 
+            else if (same_char(line[current], ',')) {
+                same_char(line[start], '\n') ? start++ : start;
+                new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
+                start = current + 1;
+                index++;
+            }
         }
 
         the_answer.data.push_back(new_map);
