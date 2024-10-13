@@ -144,7 +144,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         }
 
         std::map<std::string, std::string> new_map;
-        std::printf("line is currently %s, with a length of %lu\n", line.c_str(), line.length());
+        std::printf("line is currently \"%s\", with a length of %lu\n", line.c_str(), line.length());
         for (index = start = current = 0; current < line.length(); current++) {
             std::printf("\tindex is %lu, start is %lu, current is %lu\n", index, start, current);
             if (current == line.length() - 1) {
@@ -160,7 +160,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
                 index++;
             }
         }
-
+        line = "";
         the_answer.data.push_back(new_map);
     }
     open_file.close();
