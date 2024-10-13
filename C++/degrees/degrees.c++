@@ -102,7 +102,7 @@ int main(int len, char** args) {
         std::printf("%s:\n", movie->first.c_str());
         std::printf("\t%s\n\t%s\n\tActors: ", movie->second.title.c_str(), movie->second.year.c_str());
         for (std::set<std::string>::const_iterator star = movie->second.stars.begin(); star != movie->second.stars.end(); star++, index++) {
-            std::printf("%s%s", (index + 1 == movie->second.stars.size()) ? "\n" : ", ", star->c_str());
+            std::printf("%s%s", star->c_str(), (index + 1 == movie->second.stars.size()) ? "\n" : ", ");
         }
         if (movie->second.stars.empty()) {
             std::printf("No movies listed.\n");
