@@ -144,7 +144,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         }
 
         std::map<std::string, std::string> new_map;
-        
+        std::printf("line is currently %s\n", line.c_str());
         index = 0;
         for (start = current = 0; current < line.length(); current++) {
 
@@ -197,7 +197,7 @@ void load_data(const std::string directory) {
     //         else:
     //             names[row["name"].lower()].add(row["id"])
 
-    unsigned long index;
+    
     csv_dict_reader reader = dict_reader("people.csv", directory);
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
         people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
