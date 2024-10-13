@@ -116,7 +116,7 @@ int main(int len, char** args) {
 csv_dict_reader dict_reader(const std::string file_name, const std::string directory) {
     csv_dict_reader the_answer;
     std::string line, key, value;
-
+    std::printf("About to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
     std::ifstream open_file((std::string(directory) + sys_slash + std::string(file_name)));
     if (not open_file.is_open()) {
         std::fprintf(stderr, "Failed to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
