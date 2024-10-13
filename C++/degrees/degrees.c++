@@ -131,20 +131,19 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
             while (stream >> line) {
                 the_answer.header.push_back(line);
             }
-            index = 0;
-            for (std::vector<std::string>::const_iterator _ = the_answer.header.begin(); _ != the_answer.header.end(); _++, index++) {
-                std::printf("%s%s", _->c_str(), (index < the_answer.header.size() - 1) ? ", " : "\n");
-            }
+            // index = 0;
+            // for (std::vector<std::string>::const_iterator _ = the_answer.header.begin(); _ != the_answer.header.end(); _++, index++) {
+            //     std::printf("%s%s", _->c_str(), (index < the_answer.header.size() - 1) ? ", " : "\n");
+            // }
             continue;
         }
         std::map<std::string, std::string> new_map;
         index = 0;
         std::printf("Adding to the data...\n");
-        while (stream >> value) {
-            new_map.insert(std::make_pair(the_answer.header[index], value));
+        while (stream >> line) {
+            new_map.insert(std::make_pair(the_answer.header[index], line));
             index++;
         }
-
     }
 
     open_file.close();
