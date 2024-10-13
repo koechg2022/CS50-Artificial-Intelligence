@@ -122,7 +122,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         std::fprintf(stderr, "Failed to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
         throw std::exception();
     }
-    std::printf("Done with opening the file.\n");
+    // std::printf("Done with opening the file.\n");
     unsigned long start, current, index;
     while (std::getline(open_file, line)) {
         std::printf("line is %s\n", line.c_str());
@@ -174,6 +174,8 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
 // TODO : Implement me
 void load_data(const std::string directory) {
     
+    csv_dict_reader reader;
+
     // # Load people
     // with open(f"{directory}/people.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -188,27 +190,15 @@ void load_data(const std::string directory) {
     //         else:
     //             names[row["name"].lower()].add(row["id"])
 
-    
-    csv_dict_reader reader;
+    // Load people
     // reader = dict_reader("people.csv", directory);
     // for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
-    //     // std::printf("This person's attributes are:\n");
-    //     // for (std::map<std::string, std::string>::const_iterator attr = row->begin(); attr != row->end(); attr++) {
-    //     //     std::printf("\t%s:%s\n", attr->first.c_str(), attr->second.c_str());
-    //     // }
-    //     // std::printf("person %s\n", row->at(NAME).c_str());
-    //     // std::printf("birth: %s\n", row->at(BIRTH).c_str());
     //     people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
-    //     // std::printf("Added to people");
     //     if (names.find(row->at(NAME)) == names.end()) {
     //         std::set<std::string> _;
-    //         _.insert(row->at(ID));
     //         names.insert(std::make_pair(row->at(NAME), _));
-    //         // std::printf("Added to the name's set.\n");
-    //         continue;
     //     }
     //     names[row->at(NAME)].insert(row->at(ID));
-    //     // std::printf("Added to the name's set.\n");
     // }
 
     // # Load movies
@@ -221,6 +211,8 @@ void load_data(const std::string directory) {
     //             "stars": set()
     //         }
 
+    
+    // Load movies
     std::printf("Done filling in people.\n");
     reader = dict_reader("movies.csv", directory);
     std::printf("Read movies data.\n");
