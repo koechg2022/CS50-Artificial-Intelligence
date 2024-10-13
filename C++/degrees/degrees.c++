@@ -126,16 +126,9 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
     unsigned long start, current, index;
     while (std::getline(open_file, line)) {
 
-        // if (line.empty()) {
-        //     continue;
-        // }
-        
-        // if (same_char(line[line.length() - 1], '\n')) {
-        //     line = line.substr(0, line.length() - 1);
-        // }
         
         if (the_answer.header.empty()) {
-            std::printf("Adding to the header...\n");
+            // std::printf("Adding to the header...\n");
             for (start = current = 0; current < line.length(); current++) {
                 if (same_char(line[current], ',')) {
                     the_answer.header.push_back(line.substr(start, current - start));
@@ -151,7 +144,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         }
 
         std::map<std::string, std::string> new_map;
-        std::printf("line is currently %s\n", line.c_str());
+        // std::printf("line is currently %s\n", line.c_str());
         index = 0;
         for (start = current = 0; current < line.length(); current++) {
 
@@ -196,35 +189,26 @@ void load_data(const std::string directory) {
     //             names[row["name"].lower()].add(row["id"])
 
     
-    csv_dict_reader reader = dict_reader("people.csv", directory);
-    std::printf("Done creating the reader...\nHeaders are:\n");
-    for (std::vector<std::string>::const_iterator head = reader.header.begin(); head != reader.header.end(); head++) {
-        std::printf("%s", (head->length() > 0) ? "\"" : "");
-        for (std::string::const_iterator c = head->begin(); c != head->end(); c++) {
-            std::printf("%c", *c);
-        }
-        std::printf("%s", (head->length() > 0) ? "\"" : "");
-        // std::printf("\"%s\"\n", head->c_str());
-    }
-    
+    csv_dict_reader reader;
+    reader = dict_reader("people.csv", directory);
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
-        std::printf("This person's attributes are:\n");
-        for (std::map<std::string, std::string>::const_iterator attr = row->begin(); attr != row->end(); attr++) {
-            std::printf("\t%s:%s\n", attr->first.c_str(), attr->second.c_str());
-        }
-        std::printf("person %s\n", row->at(NAME).c_str());
-        std::printf("birth: %s\n", row->at(BIRTH).c_str());
+        // std::printf("This person's attributes are:\n");
+        // for (std::map<std::string, std::string>::const_iterator attr = row->begin(); attr != row->end(); attr++) {
+        //     std::printf("\t%s:%s\n", attr->first.c_str(), attr->second.c_str());
+        // }
+        // std::printf("person %s\n", row->at(NAME).c_str());
+        // std::printf("birth: %s\n", row->at(BIRTH).c_str());
         people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
-        std::printf("Added to people");
+        // std::printf("Added to people");
         if (names.find(row->at(NAME)) == names.end()) {
             std::set<std::string> _;
             _.insert(row->at(ID));
             names.insert(std::make_pair(row->at(NAME), _));
-            std::printf("Added to the name's set.\n");
+            // std::printf("Added to the name's set.\n");
             continue;
         }
         names[row->at(NAME)].insert(row->at(ID));
-        std::printf("Added to the name's set.\n");
+        // std::printf("Added to the name's set.\n");
     }
 
     // # Load movies
@@ -236,6 +220,11 @@ void load_data(const std::string directory) {
     //             "year": row["year"],
     //             "stars": set()
     //         }
+
+    reader = dict_reader("movies.csv", directory);
+    for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
+        movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
+    }
 
     // # Load stars
     // with open(f"{directory}/stars.csv", encoding="utf-8") as f:
