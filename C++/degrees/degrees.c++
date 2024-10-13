@@ -202,7 +202,7 @@ void load_data(const std::string directory) {
     unsigned long row_index = 0;
     std::printf("headers are:\n");
     for (std::vector<std::string>::const_iterator header = file_data.header.begin(); header != file_data.header.end(); header++, row_index++) {
-        std::printf("%lu%s", row_index, (row_index + 1 == file_data.header.size()) ? "\n" : ", ");
+        std::printf("%s%lu%s", header->c_str(), row_index, (row_index + 1 == file_data.header.size()) ? "\n" : ", ");
     }
     row_index = 0;
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++, row_index++) {
