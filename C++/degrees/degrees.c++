@@ -188,15 +188,15 @@ void load_data(const std::string directory) {
     //             names[row["name"].lower()].add(row["id"])
 
     // Load people
-    // reader = dict_reader("people.csv", directory);
-    // for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
-    //     people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
-    //     if (names.find(row->at(NAME)) == names.end()) {
-    //         std::set<std::string> _;
-    //         names.insert(std::make_pair(row->at(NAME), _));
-    //     }
-    //     names[row->at(NAME)].insert(row->at(ID));
-    // }
+    reader = dict_reader("people.csv", directory);
+    for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
+        people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
+        if (names.find(row->at(NAME)) == names.end()) {
+            std::set<std::string> _;
+            names.insert(std::make_pair(row->at(NAME), _));
+        }
+        names[row->at(NAME)].insert(row->at(ID));
+    }
 
     // # Load movies
     // with open(f"{directory}/movies.csv", encoding="utf-8") as f:
@@ -210,15 +210,15 @@ void load_data(const std::string directory) {
 
     
     // Load movies
-    std::printf("Done filling in people.\n");
-    reader = dict_reader("movies.csv", directory);
-    std::printf("Read movies data.\n");
-    for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
-        for (std::map<std::string, std::string>::const_iterator attr = row->begin(); attr != row->end(); attr++) {
-            std::printf("%s : %s\n", attr->first.c_str(), attr->second.c_str());
-        }
-        // movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
-    }
+    // std::printf("Done filling in people.\n");
+    // reader = dict_reader("movies.csv", directory);
+    // std::printf("Read movies data.\n");
+    // for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
+    //     for (std::map<std::string, std::string>::const_iterator attr = row->begin(); attr != row->end(); attr++) {
+    //         std::printf("%s : %s\n", attr->first.c_str(), attr->second.c_str());
+    //     }
+    //     movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
+    // }
 
     // # Load stars
     // with open(f"{directory}/stars.csv", encoding="utf-8") as f:
