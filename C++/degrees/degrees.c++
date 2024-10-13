@@ -143,7 +143,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
                 }
 
                 else if (current == line.length() - 1) {
-                    the_answer.header.push_back(line.substr(start, current - start - 1));
+                    the_answer.header.push_back(line.substr(start, current - start));
                     start = current + 1;
                 }
             }
