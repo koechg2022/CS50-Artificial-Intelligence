@@ -148,32 +148,28 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         index = 0;
         for (start = current = 0; current < line.length(); current++) {
 
-            if (same_char(line[current], ',') or current == line.length() - 1) {
-                
-                if (same_char(line[current], ',')) {
+            if (same_char(line[current], ',')) {
 
-                    if (same_char(line[current], '"')) {
-                        new_map.insert(std::make_pair(the_answer.header[index], line.substr(start + 1, current - start - 2)));
-                    }
+                same_char(line[start], '\n') ? start++ : start;
 
-                    else if (current == line.length() - 1) {
-                        new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
-                    }
-                
-                }
+                // if (same_char(line[start], '"')) {
+                //     new_map.insert(std::make_pair(the_answer.header[index], line.substr(start + 1, current - start - 2)));
+                // }
+                // else {
+                //     new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
+                // }
+                new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
+            }
 
-                else {
-                    new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
-                }
-                
+            else if (current == line.length() - 1) {
+                new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
                 start = current + 1;
                 index++;
             }
 
-            
-
         }
-        
+
+        the_answer.data.push_back(new_map);
     }
 
     open_file.close();
