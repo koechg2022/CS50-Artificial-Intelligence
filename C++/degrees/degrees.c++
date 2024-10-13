@@ -153,13 +153,15 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
                 same_char(line[start], '\n') ? start++ : start;
 
                 new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
+                start = current + 1;
+                index++;
             }
 
             else if (current == line.length() - 1) {
                 new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
+                start = current + 1;
+                index++;
             }
-            start = current + 1;
-            index++;
 
         }
 
@@ -190,6 +192,10 @@ void load_data(const std::string directory) {
     csv_dict_reader reader = dict_reader("people.csv", directory);
     std::printf("Done creating the reader...\n");
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
+        std::printf("This person's attributes are:\n");
+        for (std::map<std::string, std::string>::const_iterator attr = row->begin(); attr != row->end(); attr++) {
+            std::printf("\t%s:%s\n", attr->first.c_str(), attr->second.c_str());
+        }
         std::printf("person %s\n", row->at(NAME).c_str());
         std::printf("birth: %s\n", row->at(BIRTH).c_str());
         people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
