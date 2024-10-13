@@ -152,12 +152,6 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
 
                 same_char(line[start], '\n') ? start++ : start;
 
-                // if (same_char(line[start], '"')) {
-                //     new_map.insert(std::make_pair(the_answer.header[index], line.substr(start + 1, current - start - 2)));
-                // }
-                // else {
-                //     new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
-                // }
                 new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
             }
 
@@ -171,7 +165,6 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
 
         the_answer.data.push_back(new_map);
     }
-
     open_file.close();
     return the_answer;
 }
@@ -197,13 +190,16 @@ void load_data(const std::string directory) {
     csv_dict_reader reader = dict_reader("people.csv", directory);
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
         people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
+        std::printf("Added to people");
         if (names.find(row->at(NAME)) == names.end()) {
             std::set<std::string> _;
             _.insert(row->at(ID));
             names.insert(std::make_pair(row->at(NAME), _));
+            std::printf("Added to the name's set.\n");
             continue;
         }
         names[row->at(NAME)].insert(row->at(ID));
+        std::printf("Added to the name's set.\n");
     }
 
     // # Load movies
