@@ -127,6 +127,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
     while (std::getline(open_file, line)) {
         std::stringstream stream(line);
         if (the_answer.header.empty()) {
+            std::printf("Adding to the header...\n");
             while (stream >> line) {
                 the_answer.header.push_back(line);
             }
@@ -134,6 +135,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         }
         std::map<std::string, std::string> new_map;
         index = 0;
+        std::printf("Adding to the data...\n");
         while (stream >> value) {
             new_map.insert(std::make_pair(the_answer.header[index], value));
             index++;
