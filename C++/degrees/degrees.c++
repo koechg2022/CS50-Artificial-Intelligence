@@ -122,7 +122,7 @@ csv_dict_reader dict_reader(std::FILE* open_csv_file) {
     while (std::fread(&c, sizeof(char), 1, open_csv_file) == 1) {
         
         if (same_char( c, '\n')) {
-            std::printf("Reading row %lu\n", row);
+            // std::printf("Reading row %lu\n", row);
             if (the_answer.header.empty()) {
                 
                 for (start = current = 0; current < line.length() and start < line.length(); current++) {
@@ -200,6 +200,11 @@ void load_data(const std::string directory) {
     file_data = dict_reader(open_file);
     std::fclose(open_file);
     unsigned long row_index = 0;
+    std::printf("headers are:\n");
+    for (std::vector<std::string>::const_iterator header = file_data.header.begin(); header != file_data.header.end(); header++, row_index++) {
+        std::printf("%lu%s", row_index, (row_index + 1 == file_data.header.size()) ? "\n" : ", ");
+    }
+    row_index = 0;
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++, row_index++) {
         std::printf("row_index : %lu\n", row_index);
         people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
