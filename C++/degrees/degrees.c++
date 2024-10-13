@@ -74,7 +74,7 @@ int main(int len, char** args) {
     load_data((len == 2) ? args[1] : "large");
     unsigned long index;
     
-    std::printf("------------------------------------------------------Names------------------------------------------------------\n");
+    std::printf("\n------------------------------------------------------Names------------------------------------------------------\n");
     for (std::map<std::string, std::set<std::string> >::const_iterator name = names.begin(); name != names.end(); name++, index++) {
         index = 0;
         std::printf("%s:\t", name->first.c_str());
@@ -83,7 +83,7 @@ int main(int len, char** args) {
         }
     }
     
-    std::printf("-----------------------------------------------------People------------------------------------------------------\n");
+    std::printf("\n-----------------------------------------------------People------------------------------------------------------\n");
     for (std::map<std::string, people_val>::const_iterator person = people.begin(); person != people.end(); person++) {
         index = 0;
         std::printf("%s:\n", person->first.c_str());
@@ -91,15 +91,21 @@ int main(int len, char** args) {
         for (std::set<std::string>::const_iterator movie = person->second.movies.begin(); movie != person->second.movies.end(); movie++, index++) {
             std::printf("%s%s", movie->c_str(), (index + 1 == person->second.movies.size()) ? "\n" : ", ");
         }
+        if (person->second.movies.empty()) {
+            std::printf("No movies for this actor.\n");
+        }
     }
     
-    std::printf("-----------------------------------------------------Movies------------------------------------------------------\n");
+    std::printf("\n-----------------------------------------------------Movies------------------------------------------------------\n");
     for (std::map<std::string, movie_val>::const_iterator movie = movies.begin(); movie != movies.end(); movie++) {
         index = 0;
         std::printf("%s:\n", movie->first.c_str());
         std::printf("\t%s\n\t%s\n\tActors: ", movie->second.title.c_str(), movie->second.year.c_str());
         for (std::set<std::string>::const_iterator star = movie->second.stars.begin(); star != movie->second.stars.end(); star++, index++) {
             std::printf("%s%s", (index + 1 == movie->second.stars.size()) ? "\n" : ", ", star->c_str());
+        }
+        if (movie->second.stars.empty()) {
+            std::printf("No movies listed.\n");
         }
     }
 
