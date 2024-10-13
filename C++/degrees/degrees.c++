@@ -197,7 +197,9 @@ void load_data(const std::string directory) {
     open_file = std::fopen((directory + sys_slash + "people.csv").c_str(), "r");
     file_data = dict_reader(open_file);
     std::fclose(open_file);
-    for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
+    unsigned long row_index = 0;
+    for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++, row_index++) {
+        std::printf("row_index : %lu\n", row_index);
         people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
 
         if (names.find(row->at(NAME)) == names.end()) {
