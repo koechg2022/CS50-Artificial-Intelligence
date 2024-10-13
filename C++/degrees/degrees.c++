@@ -116,23 +116,23 @@ int main(int len, char** args) {
 csv_dict_reader dict_reader(const std::string file_name, const std::string directory) {
     csv_dict_reader the_answer;
     std::string line, value;
-    std::printf("About to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
+    // std::printf("About to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
     std::ifstream open_file((std::string(directory) + sys_slash + std::string(file_name)));
     if (not open_file.is_open()) {
         std::fprintf(stderr, "Failed to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
         throw std::exception();
     }
-    std::printf("Done with opening the file.\n");
+    // std::printf("Done with opening the file.\n");
     unsigned long start, current, index;
     while (std::getline(open_file, line)) {
 
-        if (line.empty()) {
-            continue;
-        }
+        // if (line.empty()) {
+        //     continue;
+        // }
         
-        if (same_char(line[line.length() - 1], '\n')) {
-            line = line.substr(0, line.length() - 1);
-        }
+        // if (same_char(line[line.length() - 1], '\n')) {
+        //     line = line.substr(0, line.length() - 1);
+        // }
         
         if (the_answer.header.empty()) {
             std::printf("Adding to the header...\n");
@@ -143,7 +143,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
                 }
 
                 else if (current == line.length() - 1) {
-                    the_answer.header.push_back(line.substr(start, current - start + 1));
+                    the_answer.header.push_back(line.substr(start, current - start - 1));
                     start = current + 1;
                 }
             }
