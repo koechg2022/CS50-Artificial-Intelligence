@@ -223,6 +223,7 @@ void load_data(const std::string directory) {
 
     std::printf("Done filling in people.\n");
     reader = dict_reader("movies.csv", directory);
+    std::printf("Read movies data.\n");
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
         for (std::map<std::string, std::string>::const_iterator attr = row->begin(); attr != row->end(); attr++) {
             std::printf("%s : %s\n", attr->first.c_str(), attr->second.c_str());
