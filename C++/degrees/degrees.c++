@@ -192,7 +192,7 @@ void load_data(const std::string directory) {
     csv_dict_reader reader = dict_reader("people.csv", directory);
     std::printf("Done creating the reader...\nHeaders are:\n");
     for (std::vector<std::string>::const_iterator head = reader.header.begin(); head != reader.header.end(); head++) {
-        std::printf("%s\n", head->c_str());
+        std::printf("\"%s\"\n", head->c_str());
     }
     std::printf("\n");
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
