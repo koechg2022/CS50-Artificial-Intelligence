@@ -125,7 +125,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
     // std::printf("Done with opening the file.\n");
     unsigned long start, current, index;
     while (std::getline(open_file, line)) {
-        std::printf("line is %s\n", line.c_str());
+        // std::printf("line is %s\n", line.c_str());
         
         if (the_answer.header.empty()) {
             // std::printf("Adding to the header...\n");
@@ -144,8 +144,9 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         }
 
         std::map<std::string, std::string> new_map;
-        // std::printf("line is currently %s\n", line.c_str());
+        std::printf("line is currently %s, with a length of %lu\n", line.c_str(), line.length());
         for (index = start = current = 0; current < line.length(); current++) {
+            std::printf("\tindex is %lu\n", index);
             if (current == line.length() - 1) {
                 new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
                 start = current + 1;
