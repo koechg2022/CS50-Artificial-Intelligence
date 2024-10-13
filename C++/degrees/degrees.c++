@@ -188,6 +188,7 @@ void load_data(const std::string directory) {
 
     
     csv_dict_reader reader = dict_reader("people.csv", directory);
+    std::printf("Done creating the reader...\n");
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
         people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
         std::printf("Added to people");
