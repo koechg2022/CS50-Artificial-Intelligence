@@ -126,7 +126,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
     unsigned long start, current, index;
     while (std::getline(open_file, line)) {
         line = (not line.empty() and same_char(line[line.length() - 1], '\n')) ? line.substr(0, line.length() - 1) : line;
-        // std::printf("line is %s\n", line.c_str());
+        std::printf("line is %s\t", line.c_str());
         
         if (the_answer.header.empty()) {
             // std::printf("Adding to the header...\n");
@@ -145,7 +145,7 @@ csv_dict_reader dict_reader(const std::string file_name, const std::string direc
         }
 
         std::map<std::string, std::string> new_map;
-        std::printf("line is \n\t\"%s\" with a length of %lu\n", line.c_str(), line.length());
+        std::printf("with a length of %lu\n", line.length());
         for (index = start = current = 0; current < line.length(); current++) {
             std::printf("\tindex is %lu, start is %lu, current is %lu\n", index, start, current);
             if (current == line.length() - 1) {
