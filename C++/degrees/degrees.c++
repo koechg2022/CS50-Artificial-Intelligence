@@ -221,6 +221,7 @@ void load_data(const std::string directory) {
     //             "stars": set()
     //         }
 
+    std::printf("Done filling in people.\n");
     reader = dict_reader("movies.csv", directory);
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
         movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
