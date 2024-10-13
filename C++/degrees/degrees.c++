@@ -118,10 +118,11 @@ csv_dict_reader dict_reader(std::FILE* open_csv_file) {
     std::string line;
     unsigned long start, current, key;
     int c;
+    unsigned long row = 0;
     while (std::fread(&c, sizeof(char), 1, open_csv_file) == 1) {
         
         if (same_char( c, '\n')) {
-            
+            std::printf("Reading row %lu\n", row);
             if (the_answer.header.empty()) {
                 
                 for (start = current = 0; current < line.length() and start < line.length(); current++) {
@@ -166,6 +167,7 @@ csv_dict_reader dict_reader(std::FILE* open_csv_file) {
                 // std::printf("final line added was \"%s\"\n", line.c_str());
             }
             line = "";
+            row++;
             continue;
         }
         line = line + ((char) c);
