@@ -206,6 +206,7 @@ void load_data(const std::string directory) {
         }
         names[row->at(NAME)].insert(row->at(ID));
     }
+    std::printf("Done with people.\n");
     // # Load movies
     // with open(f"{directory}/movies.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -223,6 +224,7 @@ void load_data(const std::string directory) {
     for (std::vector<std::map<std::string, std::string> >::const_iterator row = file_data.data.begin(); row != file_data.data.end(); row++) {
         movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
     }
+    std::printf("Done with movies\n");
     // # Load stars
     // with open(f"{directory}/stars.csv", encoding="utf-8") as f:
     //     reader = csv.DictReader(f)
@@ -247,5 +249,6 @@ void load_data(const std::string directory) {
             std::fprintf(stderr, "Exception caught. Error message: %s\n", e.what());
         }
     }
+    std::printf("Done with stars.\n");
 }
 
