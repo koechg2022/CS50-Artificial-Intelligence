@@ -199,9 +199,15 @@ void load_data(const std::string directory) {
 
     unsigned long index;
     csv_dict_reader reader = dict_reader("people.csv", directory);
-    std::printf("people header data:\n\t");
-    for (index = 0; index < reader.header.size(); index++) {
-        std::printf("%s%s", reader.header[index].c_str(), (index + 1 < reader.header.size()) ? ", " : "\n");
+    for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
+        people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
+        if (names.find(row->at(NAME)) == names.end()) {
+            std::set<std::string> _;
+            _.insert(row->at(ID));
+            names.insert(std::make_pair(row->at(NAME), _));
+            continue;
+        }
+        names[row->at(NAME)].insert(row->at(ID));
     }
 
     // # Load movies
