@@ -1,5 +1,7 @@
 
 
+
+#include <fstream>
 #include <string>
 #define buffer_size 100
 
@@ -114,62 +116,25 @@ int main(int len, char** args) {
 }
 
 csv_dict_reader dict_reader(const std::string file_name, const std::string directory) {
+    
     csv_dict_reader the_answer;
-    std::string line, value;
-    // std::printf("About to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
-    std::ifstream open_file((std::string(directory) + sys_slash + std::string(file_name)));
+    std::fstream open_file(directory + sys_slash + file_name, std::ios_base::in);
+    
     if (not open_file.is_open()) {
-        std::fprintf(stderr, "Failed to open \"%s\"\n", (std::string(directory) + sys_slash + std::string(file_name)).c_str());
-        throw std::exception();
+        std::fprintf(stderr, "Failed to open file.\n");
+        return the_answer;
     }
-    // std::printf("Done with opening the file.\n");
-    unsigned long start, current, index;
-    while (std::getline(open_file, line)) {
-        if (line.empty()) {
-            continue;
-        }
-        line = (not line.empty() and same_char(line[line.length() - 1], '\n')) ? line.substr(0, line.length() - 1) : line;
-        std::printf("line is %s\t", line.c_str());
+
+    // Get the headers
+    std::string line, value;
+    unsigned long start, current;
+    std::getline(open_file, line);
+
+    if (not line.empty()) {
         
-        if (the_answer.header.empty()) {
-            // std::printf("Adding to the header...\n");
-            for (start = current = 0; current < line.length(); current++) {
-                if (same_char(line[current], ',')) {
-                    the_answer.header.push_back(line.substr(start, current - start));
-                    start = current + 1;
-                }
-
-                else if (current == line.length() - 1) {
-                    the_answer.header.push_back(line.substr(start, current - start));
-                    start = current + 1;
-                }
-            }
-            continue;
-        }
-
-        std::map<std::string, std::string> new_map;
-        std::printf("with a length of %lu\n", line.length());
-        for (index = start = current = 0; current < line.length(); current++) {
-            std::printf("\tindex is %lu, start is %lu, current is %lu\n", index, start, current);
-            if (current == line.length() - 1) {
-                new_map.insert(std::make_pair(the_answer.header[index], line.substr(start)));
-                start = current + 1;
-                index++;
-            }
-
-            else if (same_char(line[current], ',')) {
-                same_char(line[start], '\n') ? start++ : start;
-                if (index < the_answer.header.size()) {
-                    new_map.insert(std::make_pair(the_answer.header[index], line.substr(start, current - start)));
-                }
-                start = current + 1;
-                index++;
-            }
-        }
-        line = "";
-        the_answer.data.push_back(new_map);
     }
-    open_file.close();
+
+    
     return the_answer;
 }
 
@@ -178,62 +143,6 @@ void load_data(const std::string directory) {
     
     csv_dict_reader reader;
 
-    // # Load people
-    // with open(f"{directory}/people.csv", encoding="utf-8") as f:
-    //     reader = csv.DictReader(f)
-    //     for row in reader:
-    //         people[row["id"]] = {
-    //             "name": row["name"],
-    //             "birth": row["birth"],
-    //             "movies": set()
-    //         }
-    //         if row["name"].lower() not in names:
-    //             names[row["name"].lower()] = {row["id"]}
-    //         else:
-    //             names[row["name"].lower()].add(row["id"])
-
-    // Load people
-    // reader = dict_reader("people.csv", directory);
-    // for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
-    //     people.insert(std::make_pair(row->at(ID), (people_val) {row->at(NAME), row->at(BIRTH), std::set<std::string>()}));
-    //     if (names.find(row->at(NAME)) == names.end()) {
-    //         std::set<std::string> _;
-    //         names.insert(std::make_pair(row->at(NAME), _));
-    //     }
-    //     names[row->at(NAME)].insert(row->at(ID));
-    // }
-
-    // # Load movies
-    // with open(f"{directory}/movies.csv", encoding="utf-8") as f:
-    //     reader = csv.DictReader(f)
-    //     for row in reader:
-    //         movies[row["id"]] = {
-    //             "title": row["title"],
-    //             "year": row["year"],
-    //             "stars": set()
-    //         }
-
-    
-    // Load movies
-    std::printf("Done filling in people.\n");
-    reader = dict_reader("movies.csv", directory);
-    std::printf("Read movies data.\n");
-    for (std::vector<std::map<std::string, std::string> >::const_iterator row = reader.data.begin(); row != reader.data.end(); row++) {
-        for (std::map<std::string, std::string>::const_iterator attr = row->begin(); attr != row->end(); attr++) {
-            std::printf("%s : %s\n", attr->first.c_str(), attr->second.c_str());
-        }
-        movies.insert(std::make_pair(row->at(ID), (movie_val) {row->at(TITLE), row->at(YEAR), std::set<std::string>()}));
-    }
-
-    // # Load stars
-    // with open(f"{directory}/stars.csv", encoding="utf-8") as f:
-    //     reader = csv.DictReader(f)
-    //     for row in reader:
-    //         try:
-    //             people[row["person_id"]]["movies"].add(row["movie_id"])
-    //             movies[row["movie_id"]]["stars"].add(row["person_id"])
-    //         except KeyError:
-    //             pass
     
 }
 
