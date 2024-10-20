@@ -27,7 +27,7 @@ bool same_char(const char a, const char b, bool ignore_case = true) {
 }
 
 bool same_string(const std::string& first, const std::string& second, bool ignore_case = true) {
-    if (first.length() != second.length()) {
+    if (first.length() NOT second.length()) {
         return false;
     }
     unsigned long index;

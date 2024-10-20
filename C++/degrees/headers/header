@@ -74,3 +74,4 @@
 #define is ==
 #define less <
 #define greater >
+#define NOT !=
